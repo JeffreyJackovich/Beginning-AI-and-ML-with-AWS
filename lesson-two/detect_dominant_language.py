@@ -1,7 +1,7 @@
 import boto3
 import json
 
-comprehend = boto3.client(service_name='comprehend', region_name='<input region>')
+comprehend = boto3.client(service_name='comprehend', region_name='us-east-1')
 text = "Machine Learning is fascinating."
 
 print('Calling DetectDominantLanguage')
