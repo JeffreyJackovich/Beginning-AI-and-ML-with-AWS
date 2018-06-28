@@ -12,10 +12,10 @@ spanish_string_list = ['El aprendizaje automático es fascinante.', 'Estudiar In
 
 print('Calling BatchDetectDominantLanguage')
 
-print('english_string_list result:')
+print('english_string_list results:')
 # json.dumps() writes JSON data to a Python string
 print(json.dumps(comprehend.batch_detect_dominant_language(TextList = english_string_list), sort_keys=True, indent=4))
 
-print('\nspanish_string_list result:')
+print('\nspanish_string_list results:')
 print(json.dumps(comprehend.batch_detect_dominant_language(TextList = spanish_string_list), sort_keys=True, indent=4))
 print('End of BatchDetectDominantLanguage\n')
