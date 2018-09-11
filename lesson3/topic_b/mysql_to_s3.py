@@ -6,9 +6,9 @@ import boto
 from boto.s3.key import Key
 
 
-##################################################################################
+####################################################################
 # mysql to local text files
-##################################################################################
+####################################################################
 conn = pymysql.connect(db='<your db name>',
 						host='<your host name>',
 						port='<port number>',
@@ -31,27 +31,29 @@ with conn.cursor() as cur:
 		article_content = line[5]
 		articleId = line[7]
 		category = line[4]
-		out_file = open(text_file_directory_output + "category_{0}__articleID_{1}.txt".format(category, articleId), 'w+', encoding="utf-8")
+		out_file = open(text_file_directory_output + \
+			"category_{0}__articleID_{1}.txt".format(category, articleId), 'w+', encoding="utf-8")
 		#out_file.write(article_description)
 		out_file.write(articleContent)
 out_file.close() 
 
 
-
-##################################################################################
+############################################################
 # local text files to S3
-##################################################################################
+############################################################
 AWS_ACCESS_KEY_ID = '<>'
 AWS_SECRET_ACCESS_KEY = '<>'
-END_POINT = '<>'                          # eg. us-east-1
-S3_HOST = '<>'                            # eg. s3.us-east-1.amazonaws.com
+END_POINT = '<>'     # eg. us-east-1
+S3_HOST = '<>'       # eg. s3.us-east-1.amazonaws.com
 BUCKET = '<>'
 BUCKET_DIRECTORY = '<input directory>/'             
+        
 
-conn = boto.s3.connect_to_region(END_POINT,
-                       aws_access_key_id=AWS_ACCESS_KEY_ID,
-                       aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-                       host=S3_HOST)
+conn = boto.s3.connect_to_region(
+			END_POINT,
+			aws_access_key_id=AWS_ACCESS_KEY_ID,
+			aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+			host=S3_HOST)
 
 
 LOCAL_PATH = os.getcwd() +'\\<input directory>\\'

@@ -30,10 +30,15 @@ with open('topic-terms.csv', 'r', encoding="utf-8") as in_file:
 #import all articles to MySQL database
 with conn.cursor() as cur:
 	for row in row_list:
-		cur.execute("CREATE TABLE IF NOT EXISTS known_structure__topic_terms (id INTEGER NOT NULL AUTO_INCREMENT, topic INTEGER NOT NULL, \
-														term VARCHAR(400) NOT NULL, \
-														weight FLOAT NOT NULL,\
-									                    PRIMARY KEY (id) );") 
-		cur.execute("INSERT IGNORE INTO linkedTopicDB2.known_structure__topic_terms (topic, term, weight) VALUES (%s, %s, %s)", (row[0], row[1], row[2]))
+		cur.execute("CREATE TABLE IF NOT EXISTS known_structure__topic_terms (\
+			id INTEGER NOT NULL AUTO_INCREMENT, \
+			topic INTEGER NOT NULL, \
+			term VARCHAR(400) NOT NULL, \
+			weight FLOAT NOT NULL,\
+            PRIMARY KEY (id) );") 
+		cur.execute("INSERT IGNORE INTO \
+			linkedTopicDB2.known_structure__topic_terms \
+			(topic, term, weight) \
+			VALUES (%s, %s, %s)", (row[0], row[1], row[2]))
 	conn.commit()
 	conn.close()

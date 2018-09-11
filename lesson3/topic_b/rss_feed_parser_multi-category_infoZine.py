@@ -3,7 +3,6 @@ import pymysql
 from bs4 import BeautifulSoup 
 import requests
 import re 
-#import string
 
 #mysql connection 
 conn = pymysql.connect(db='<your db name>',
@@ -14,10 +13,11 @@ conn = pymysql.connect(db='<your db name>',
 						use_unicode=True,
 						charset='utf8')
 
-
 # use_unicode=True,
 # charset='utf8'
-# UnicodeEncodeError: 'latin-1' codec can't encode character '\u2019' in position 237: ordinal not in range(256)
+# UnicodeEncodeError: 'latin-1' codec can't encode 
+# character '\u2019' in position 237: ordinal
+#  not in range(256)
 
 base_url = 'http://rss.infozine.com/kc/'
 
@@ -51,7 +51,6 @@ categories_url_list = ['arts.xml',
 					'travel.xml',
 					'international.xml']
 
-
 # create an empty list
 articles_list = []
 
@@ -81,30 +80,33 @@ for category_url in categories_url_list:
 		index_of_infoZine_substring = total_article_content.rfind('- infoZine -')
 		index_to_start_slice = index_of_infoZine_substring + 12
 		article_content = total_article_content[index_to_start_slice:]
-		
-		#remove special characters
-		# article_content_special_char_removed = re.sub('\W+',' ', sliced_article_content)
-		# article_content = article_content_special_char_removed
 
-		# extend() - Iterates over its arguments adding each RSS element to the list (i.e. row_list).
+		# extend()
+		# Iterates over its arguments adding RSS elements to the  row_list
 		row_list.extend((title, description, link, article_content, category, pubDate))
 		# append() - Appends objects at the end off the list (i.e. articles_list).
 		articles_list.append(row_list)
-
 
 
 # import all articles to MySQL database
 # avoid importing duplicate articles 
 with conn.cursor() as cur:
 	for row in articles_list:
-		cur.execute("CREATE TABLE IF NOT EXISTS all_infozine_articles (id INTEGER NOT NULL AUTO_INCREMENT, title VARCHAR(350), \
-														description VARCHAR(2000), \
-														link VARCHAR(350) NOT NULL,\
-									                    article_content VARCHAR(8000), \
-									                    category VARCHAR(350),\
-									                    pubDate VARCHAR(150),\
-									                    PRIMARY KEY (link), \
-									                    KEY id (id) );") 
-		cur.execute("INSERT IGNORE INTO linkedTopicDB2.all_infozine_articles (title, description, link, article_content, category, pubDate) VALUES (%s, %s, %s, %s, %s, %s)", (row[0], row[1], row[2], row[3], row[4], row[5]))
+		cur.execute("CREATE TABLE IF NOT EXISTS \
+			all_infozine_articles \
+			(id INTEGER NOT NULL AUTO_INCREMENT, \
+			title VARCHAR(350), \
+			description VARCHAR(2000), \
+			link VARCHAR(350) NOT NULL,\
+            article_content VARCHAR(8000), \
+            category VARCHAR(350),\
+            pubDate VARCHAR(150),\
+            PRIMARY KEY (link), \
+            KEY id (id) );") 
+		cur.execute("INSERT IGNORE INTO \
+			linkedTopicDB2.all_infozine_articles \
+			(title, description, link, article_content, category, pubDate) \
+			VALUES \
+			(%s, %s, %s, %s, %s, %s)", (row[0], row[1], row[2], row[3], row[4], row[5]))
 	conn.commit()
 	conn.close()

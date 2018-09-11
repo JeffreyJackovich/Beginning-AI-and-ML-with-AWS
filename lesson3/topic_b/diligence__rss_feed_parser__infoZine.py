@@ -9,8 +9,6 @@ conn = pymysql.connect(db='<your db name>',
 						use_unicode=True,
 						charset='utf8')
 
-
-
 #feed_url = 'http://rss.infozine.com/kc/sports.xml'
 feed_url = 'http://rss.infozine.com/kc/music.xml'
 
@@ -30,9 +28,9 @@ for article in feed_object.entries:
 	category = feed.channel.category[:-1]
 	pubDate = article.published
 	unique_article_id = article.guid[-6:-1]
-	# extend() - Iterates over its arguments adding each RSS element to the list (i.e. row_list).
+	# extend()-Iterates arguments adding RSS element to the row_list
 	row_list.extend((title, description, link, category, pubDate, unique_article_id))
-	# append() - Appends objects at the end off the list (i.e. articles_list).
+	# append() - Appends objects at the end off the articles_list
 	articles.append(row_list)
 
 
@@ -40,13 +38,18 @@ for article in feed_object.entries:
 #add all posts to write to the db with 
 with conn.cursor() as cur:
 	for row in articles_list:
-		cur.execute("CREATE TABLE IF NOT EXISTS infozine_articles (id int NOT NULL auto_increment, title VARCHAR(350), \
-														description VARCHAR(2000), \
-														link VARCHAR(350),\
-									                    category VARCHAR(350),\
-									                    pubDate VARCHAR(150),\
-									                    unique_article_id VARCHAR(150), 			\
-									                    PRIMARY KEY (id));")
-		cur.execute("INSERT INTO <enter your db name>.infozine_articles (title, description, link, category, pubDate, unique_article_id) VALUES (%s, %s, %s, %s, %s, %s)", (row[0], row[1], row[2], row[3], row[4], row[5]))
+		cur.execute("CREATE TABLE IF NOT EXISTS infozine_articles (\
+			id int NOT NULL auto_increment, \
+			title VARCHAR(350), \
+			description VARCHAR(2000), \
+			link VARCHAR(350),\
+            category VARCHAR(350),\
+            pubDate VARCHAR(150),\
+            unique_article_id VARCHAR(150), 			\
+            PRIMARY KEY (id));")
+		cur.execute("INSERT INTO \
+			<enter your db name>.infozine_articles \
+			(title, description, link, category, pubDate, unique_article_id) \
+			VALUES (%s, %s, %s, %s, %s, %s)", (row[0], row[1], row[2], row[3], row[4], row[5]))
 	conn.commit()
 	conn.close()

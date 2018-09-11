@@ -1,11 +1,11 @@
 #SELECT * FROM linkedTopicDB2.infozine_articles;
 
-/*
+
 # check for duplicate articles
 SELECT count(unique_article_id),
 		count(distinct(unique_article_id)) 
 FROM linkedTopicDB2.infozine_articles;
-*/
+
 
 
 # check if description meets 3 sentence requirement (~60 words)
